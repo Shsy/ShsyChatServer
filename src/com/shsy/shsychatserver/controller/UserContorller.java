@@ -22,7 +22,7 @@ import java.util.Random;
  */
 
 @Controller
-@RequestMapping("user")
+@RequestMapping("api/user")
 public class UserContorller {
 
     /**
@@ -47,6 +47,8 @@ public class UserContorller {
         if (!TextUtil.equals(user.getPassword(), EncryptionUtil.MD5(password))) {
             return JSONObject.toJSONString(new ResultBean(-1, "密码不对啊", ""));
         }
+        user.setIsLogin("1");
+        user.setToken(EncryptionUtil.MD5(String.valueOf(System.currentTimeMillis() + new Random().nextLong())));
         if (UserService.getInstence().updateUser(user.getId(), user) == -1) {
             return JSONObject.toJSONString(new ResultBean(-1, "登录失败请稍后再试", ""));
         }

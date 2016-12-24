@@ -96,7 +96,16 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserBean selectUserFromId(String id) {
-        return null;
+
+        DbcpBean dbcpBean = JdbcUtil.getDbcpBean();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM tb_user WHERE id = ?";
+
+        UserBean user = new UserBean();
+
+        return selectUser(id, dbcpBean, conn, ps, rs, sql, user);
     }
 
     @Override
@@ -109,10 +118,14 @@ public class UserDaoImpl implements UserDao {
 
         UserBean user = new UserBean();
 
+        return selectUser(username, dbcpBean, conn, ps, rs, sql, user);
+    }
+
+    private UserBean selectUser(String nameorid, DbcpBean dbcpBean, Connection conn, PreparedStatement ps, ResultSet rs, String sql, UserBean user) {
         try {
             conn = dbcpBean.getConn();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, username);
+            ps.setString(1, nameorid);
             rs = ps.executeQuery();
 
             if (rs.next()) {

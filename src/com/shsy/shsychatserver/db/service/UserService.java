@@ -39,4 +39,8 @@ public class UserService {
     public UserBean selectUserFromName(String username) {
         return mUserDao.selectUserFromName(username);
     }
+
+    public UserBean selectUserFromId(String id) {
+        return mUserDao.selectUserFromId(id);
+    }
 }

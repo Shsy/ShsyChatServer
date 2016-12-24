@@ -78,4 +78,30 @@ public class UserContorller {
             return JSONObject.toJSONString(new ResultBean(0, "用户创建成功", ""));
         }
     }
+
+    /**
+     * 退出登录
+     *
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    @ResponseBody
+    public String logout(HttpServletRequest req) {
+        final String uid = req.getParameter("uid");
+        if (TextUtil.isEmpty(uid)) {
+            return JSONObject.toJSONString(new ResultBean(0, "uid不能为空啊伙计", ""));
+        }
+        UserBean user = UserService.getInstence().selectUserFromId(uid);
+        if (user == null) {
+            return JSONObject.toJSONString(new ResultBean(0, "退出登录失败啊,没查到uid", ""));
+        }
+        user.setToken("");
+        user.setIsLogin("0");
+        int result = UserService.getInstence().updateUser(uid, user);
+        if (result == -1) {
+            return JSONObject.toJSONString(new ResultBean(0, "退出登录失败啊", ""));
+        }
+        return JSONObject.toJSONString(new ResultBean(0, "退出登录成功", ""));
+    }
 }

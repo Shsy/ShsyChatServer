@@ -4,6 +4,16 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+    <servlet>
+        <servlet-name>SunnyWallServlet</servlet-name>
+        <servlet-class>com.shsy.shsychatserver.servlet.SunnyWallServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SunnyWallServlet</servlet-name>
+        <url-pattern>/SunnyWallServlet</url-pattern>
+    </servlet-mapping>
+
+    <!--Spring配置-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <!-- 应用上下文配置文件 -->
@@ -25,5 +35,5 @@
         <servlet-name>spring</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
+    <!--Spring配置结束-->
 </web-app>

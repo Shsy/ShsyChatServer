@@ -4,15 +4,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <servlet>
-        <servlet-name>SunnyWallServlet</servlet-name>
-        <servlet-class>com.shsy.shsychatserver.servlet.SunnyWallServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>SunnyWallServlet</servlet-name>
-        <url-pattern>/SunnyWallServlet</url-pattern>
-    </servlet-mapping>
-
     <!--Spring配置-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -34,6 +25,28 @@
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!-- static resources -->
+    <!--不拦截静态文件-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.gif</url-pattern>
+
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
     </servlet-mapping>
     <!--Spring配置结束-->
 </web-app>

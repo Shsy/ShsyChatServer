@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -33,9 +35,10 @@ public class UserContorller {
      */
     @RequestMapping(value = "login", method = RequestMethod.GET)
     @ResponseBody
-    public String login(HttpServletRequest req) {
+    public String login(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         final String username = req.getParameter("username");
         final String password = req.getParameter("password");
+        final String devices = req.getParameter("devices");
 
         if (TextUtil.isEmpty(username) || TextUtil.isEmpty(password)) {
             return JSONObject.toJSONString(new ResultBean(-1, "用户名或密码不能为空啊", ""));
@@ -51,6 +54,10 @@ public class UserContorller {
         user.setToken(EncryptionUtil.MD5(String.valueOf(System.currentTimeMillis() + new Random().nextLong())));
         if (UserService.getInstence().updateUser(user.getId(), user) == -1) {
             return JSONObject.toJSONString(new ResultBean(-1, "登录失败请稍后再试", ""));
+        }
+        if (!TextUtil.equals("mobile", devices)) {// 不是移移动设备发来的请求
+            req.getSession().setAttribute("username", user.getUsername());
+            resp.sendRedirect("/api/sunnywall/findall");
         }
         return JSONObject.toJSONString(new ResultBean(0, "登录成功", JSONObject.toJSONString(user)));
     }

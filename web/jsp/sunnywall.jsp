@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
@@ -14,10 +14,10 @@
 </head>
 <body>
 
-<jsp:useBean id="strs" scope="request" type="java.util.ArrayList<java.lang.String>"/>
-<c:forEach items="${strs}" var="c">
+<jsp:useBean id="sunnyWalls" scope="request" type="java.util.ArrayList<com.shsy.shsychatserver.bean.SunnyWallBean>"/>
+<c:forEach items="${sunnyWalls}" var="sunnyWall">
 
-    <div>${c}</div>
+    <div>${sunnyWall.id}${sunnyWall.username}${sunnyWall.date}${sunnyWall.msg}</div>
 
 </c:forEach>
 

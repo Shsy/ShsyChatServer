@@ -1,6 +1,7 @@
 package com.shsy.shsychatserver.controller;
 
 import com.shsy.shsychatserver.bean.SunnyWallBean;
+import com.shsy.shsychatserver.db.service.SunnyWallService;
 import com.shsy.shsychatserver.utils.TextUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,13 +33,9 @@ public class SunnyWallContorller {
     @RequestMapping(value = "findall", method = RequestMethod.GET)
     @ResponseBody
     public void findAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (!TextUtil.isEmpty((CharSequence) req.getSession().getAttribute("username"))) {// 已经登录
-            List<SunnyWallBean> sunnyWalls = new ArrayList<>();
-
-            sunnyWalls.add(new SunnyWallBean("1", "a", "b", "c"));
-            sunnyWalls.add(new SunnyWallBean("2", "a", "b", "c"));
-            sunnyWalls.add(new SunnyWallBean("3", "a", "b", "c"));
-
+        final String username = (String) req.getSession().getAttribute("username");
+        if (!TextUtil.isEmpty(username)) {// 已经登录
+            List<SunnyWallBean> sunnyWalls = SunnyWallService.getInstence().findAll();
             req.setAttribute("sunnyWalls", sunnyWalls);
             req.getRequestDispatcher("/jsp/sunnywall.jsp").forward(req, resp);
         } else {// 未登录
@@ -58,6 +54,21 @@ public class SunnyWallContorller {
      */
     @RequestMapping(value = "addSunnyWall", method = RequestMethod.GET)
     @ResponseBody
-    public void addSunnyWall(HttpServletRequest req) {
+    public void addSunnyWall(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        final String username = (String) req.getSession().getAttribute("username");
+        final String msg = req.getParameter("msg");
+        final String date = String.valueOf(System.currentTimeMillis());
+
+        int result = SunnyWallService.getInstence().addSunnyWall(new SunnyWallBean("", username, msg, date));
+
+        if (result != -1) {
+            resp.setHeader("refresh", "0;URL=/api/sunnywall/findall");
+        } else {
+            resp.setHeader("Content-type", "text/html;charset=UTF-8");
+            PrintWriter writer = resp.getWriter();
+            writer.write("添加失败");
+            writer.flush();
+            writer.close();
+        }
     }
 }
